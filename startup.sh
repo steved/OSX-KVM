@@ -26,6 +26,7 @@ addtap="$?"
 set -e
 
 modprobe vfio-pci ids=8086:9cb1
+modprobe qxl
 
 echo "8086 9cb1" > /sys/bus/pci/drivers/vfio-pci/new_id
 echo 0000:00:14.0 > /sys/bus/pci/devices/0000\:00\:14.0/driver/unbind
@@ -43,23 +44,23 @@ fi
 EOF
 
 qemu-system-x86_64 -enable-kvm -m 6144 -cpu Penryn,kvm=off,vendor=GenuineIntel \
-	-machine pc-q35-2.4 \
-	-smp 4,cores=2 \
-	-device isa-applesmc,osk="ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc" \
-	-kernel ./enoch_rev2839_boot \
-	-smbios type=2 \
-	-device ide-drive,bus=ide.0,drive=MacHDD \
-	-drive id=MacHDD,if=none,file=./mac_hdd.img \
-	-netdev tap,id=net0,ifname=tap0,script=no,downscript=no \
-	-device e1000-82545em,netdev=net0,id=net0,mac=52:54:00:c9:18:27 \
-	-monitor stdio \
-	-usbdevice tablet -device usb-kbd \
-	-device vfio-pci,host=00:14.0 \
-	-vga qxl \
-       	-device virtio-serial-pci \
-	-device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
-	-chardev spicevmc,id=spicechannel0,name=vdagent \
-	-spice unix,addr=/tmp/vm_spice.socket,disable-ticketing
+  -machine q35 \
+  -smp 4,cores=2 \
+  -device isa-applesmc,osk="ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc" \
+  -kernel ./enoch_rev2839_boot \
+  -smbios type=2 \
+  -device ide-drive,bus=ide.0,drive=MacHDD \
+  -drive id=MacHDD,if=none,file=./mac_hdd.img \
+  -netdev tap,id=net0,ifname=tap0,script=no,downscript=no \
+  -device e1000-82545em,netdev=net0,id=net0,mac=52:54:00:c9:18:27 \
+  -monitor stdio \
+  -usbdevice tablet -device usb-kbd \
+  -device vfio-pci,host=00:14.0 \
+  -vga qxl \
+  -device virtio-serial-pci \
+  -device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
+  -chardev spicevmc,id=spicechannel0,name=vdagent \
+  -spice unix,addr=/tmp/vm_spice.socket,disable-ticketing
 
 sudo /bin/bash -ex <<'EOF'
 echo 0000:00:14.0 > /sys/bus/pci/devices/0000\:00\:14.0/driver/unbind
