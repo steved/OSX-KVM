@@ -16,7 +16,6 @@
 #
 # Network device "-device e1000-82545em" can be replaced with "-device vmxnet3"
 # for possibly better performance.
-
 qemu-system-x86_64 -enable-kvm -m 8192 -cpu core2duo,kvm=off \
 	  -machine pc-q35-2.4 \
 	  -smp 4,cores=2 \

@@ -17,19 +17,16 @@
 # Network device "-device e1000-82545em" can be replaced with "-device vmxnet3"
 # for possibly better performance.
 
-qemu-system-x86_64 -enable-kvm -m 6144 -cpu Penryn,kvm=off,vendor=GenuineIntel \
+qemu-system-x86_64 -enable-kvm -m 8192 -cpu Penryn,kvm=off,vendor=GenuineIntel \
 	  -machine pc-q35-2.4 \
 	  -smp 4,cores=2 \
 	  -usb -device usb-kbd -device usb-mouse \
-	  -device isa-applesmc,osk="ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc" \
-	  -kernel ./enoch_rev2839_boot \
 	  -smbios type=2 \
 	  -device ide-drive,bus=ide.2,drive=MacHDD \
 	  -drive id=MacHDD,if=none,file=./mac_hdd.img \
-	  -netdev tap,id=net0,ifname=tap0,script=no,downscript=no -device e1000-82545em,netdev=net0,id=net0,mac=52:54:00:c9:18:27 \
 	  -monitor stdio \
 	  -device ide-drive,bus=ide.0,drive=MacDVD \
-	  -drive id=MacDVD,if=none,snapshot=on,file=./'Install_macOS_Sierra_(OS_X_10.12.2).iso'
+    -drive id=MacDVD,if=none,snapshot=on,file=./'gparted-live-0.27.0-1-amd64 (1).iso'
 	  # -vnc 0.0.0.0:0 -k en-us \
 	  # -redir tcp:5901::5900 \
 	  # -netdev user,id=hub0port0 -device e1000-82545em,netdev=hub0port0,id=mac_vnet0 \
